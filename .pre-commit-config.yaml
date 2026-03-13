@@ -38,14 +38,20 @@ repos:
     hooks:
       - id: check-pre-commit-ci-config
 
-  # Jupyter notebook cleanup
+  # Jupyter notebook cleanup + empty cell removal
   - repo: https://github.com/kynan/nbstripout
     rev: 0.7.1
     hooks:
       - id: nbstripout
-        args: [--keep-output]         # drop --keep-output to also strip outputs
+        args: [--keep-output]
 
-  # Notebook cell formatting
+  - repo: https://github.com/srstevenson/nb-clean
+    rev: 3.1.0
+    hooks:
+      - id: nb-clean
+        args: [--remove-empty-cells]
+
+  # Notebook cell formatting (Python cells)
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.8.7
     hooks:
