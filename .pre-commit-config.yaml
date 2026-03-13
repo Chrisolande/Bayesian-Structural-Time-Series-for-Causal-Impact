@@ -1,0 +1,74 @@
+repos:
+  - repo: https://github.com/lorenzwalthert/precommit
+    rev: v0.4.3.9021
+    hooks:
+      - id: style-files
+        args: [--style_pkg=styler, --style_fun=tidyverse_style]
+        additional_dependencies:
+          - styler
+          - roxygen2
+      - id: lintr
+      - id: readme-rmd-rendered
+      - id: parsable-R
+      - id: no-browser-statement
+      - id: no-debug-statement
+      - id: deps-in-desc
+        stages: [manual]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=2000']
+      - id: end-of-file-fixer
+        exclude: '(\.Rd|\.ipynb)$'
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+          - --markdown-linebreak-ext=Rmd
+          - --markdown-linebreak-ext=qmd
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # pre-commit.ci config validation
+  - repo: https://github.com/pre-commit-ci/pre-commit-ci-config
+    rev: v1.6.1
+    hooks:
+      - id: check-pre-commit-ci-config
+
+  # Jupyter notebook cleanup
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout
+        args: [--keep-output]         # drop --keep-output to also strip outputs
+
+  # Notebook cell formatting
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.8.7
+    hooks:
+      - id: nbqa-black
+      - id: nbqa-isort
+        args: [--profile=black]
+
+  # YAML lint
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        files: '\.(yaml|yml|qmd|Rmd)$'
+        args: [-d, '{extends: relaxed, rules: {line-length: {max: 120}}}']
+
+  # Local guards
+  - repo: local
+    hooks:
+      - id: forbid-to-commit
+        name: Don't commit common R artifacts
+        entry: Cannot commit .Rhistory, .RData, .Rds or .rds.
+        language: fail
+        files: '\.(Rhistory|RData|Rds|rds)$'
+
+ci:
+  autoupdate_schedule: monthly
