@@ -49,7 +49,7 @@ repos:
     rev: 3.1.0
     hooks:
       - id: nb-clean
-        args: [--remove-empty-cells]
+        args: [--remove-empty-cells, --preserve-cell-outputs]
 
   # Notebook cell formatting (Python cells)
   - repo: https://github.com/nbQA-dev/nbQA
